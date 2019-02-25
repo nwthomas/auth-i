@@ -39,4 +39,20 @@ server.post("/api/register", async (req, res) => {
   }
 });
 
+server.post("/api/login", async (req, res) => {
+  const creds = req.body;
+  try {
+    const user = await db("users")
+      .where({ username: creds.username })
+      .first();
+    if (user && bcrypt.compareSync(creds.password, user.password)) {
+      res.status(200).json({ message: "User logged in successfully." });
+    } else {
+      res.status(404).json({ message: "Error. User could not be logged in." });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error. User could not be logged in." });
+  }
+});
+
 module.exports = server;
