@@ -3,6 +3,8 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const db = require("./data/dbConfig.js");
 const session = require("express-session");
+const KnexSessionStore = require("connect-session-knex")(session);
+
 const sessionConfig = {
   name: "monkey", // Default is sid which gives away the name of the library
   secret: "asdfp9auy0987yuhaif", // Anything we want to add that just makes a random secret
@@ -12,8 +14,16 @@ const sessionConfig = {
   },
   httpOnly: true, // js can't touch this
   resave: false,
-  saveUninitalized: false
+  saveUninitalized: false,
+  store: new KnexSessionStore({
+    knex: db,
+    tableName: "sessions",
+    sidfieldname: "side",
+    createTable: true,
+    clearInterval: 1000 * 60 * 60
+  })
 };
+
 const server = express();
 server.use(express.json());
 server.use(cors());
