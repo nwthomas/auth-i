@@ -105,4 +105,18 @@ server.get("/users", protected, async (req, res) => {
   res.status(200).json(users);
 });
 
+server.get("/logout", (req, res) => {
+  if (req.session) {
+    req.session.destroy(err => {
+      if (err) {
+        res.status(500).json({ message: "There was an error logging out." });
+      } else {
+        res.status(200).json({ message: "User was successfully logged out." });
+      }
+    });
+  } else {
+    res.json({ message: "Logged out already." });
+  }
+});
+
 module.exports = server;
