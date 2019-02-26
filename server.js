@@ -2,9 +2,22 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const db = require("./data/dbConfig.js");
+const session = require("express-session");
+const sessionConfig = {
+  name: "monkey", // Default is sid which gives away the name of the library
+  secret: "asdfp9auy0987yuhaif", // Anything we want to add that just makes a random secret
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24,
+    secure: false // Should be true in production so that cookies can send/receive over HTTPS
+  },
+  httpOnly: true, // js can't touch this
+  resave: false,
+  saveUninitalized: false
+};
 const server = express();
 server.use(express.json());
 server.use(cors());
+server.use(session(sessionConfig));
 
 server.get("/", (req, res) => {
   res.send("Working!");
@@ -46,6 +59,7 @@ server.post("/api/login", async (req, res) => {
       .where({ username: creds.username })
       .first();
     if (user && bcrypt.compareSync(creds.password, user.password)) {
+      req.session.user = user; // Gets added to the reqests and can be used to add information
       res.status(200).json({ message: "User logged in successfully." });
     } else {
       res.status(404).json({ message: "Error. User could not be logged in." });
@@ -76,5 +90,19 @@ function restricted(req, res, next) {
     res.status(400).json({ message: "No credentials provided" });
   }
 }
+
+function protected(req, res, next) {
+  // if the use is logged in, use next()
+  if (req.session && req.session.user) {
+    next();
+  } else {
+    res.status(401).json({ message: "You could not be logged in." });
+  }
+}
+
+server.get("/users", protected, async (req, res) => {
+  const users = await db("users").select("id", "username");
+  res.status(200).json(users);
+});
 
 module.exports = server;
