@@ -1,12 +1,13 @@
 const express = require("express");
 const cors = require("cors");
+const morgan = require("morgan");
 const bcrypt = require("bcryptjs");
 const db = require("./data/dbConfig.js");
 const session = require("express-session");
 const KnexSessionStore = require("connect-session-knex")(session);
 const sessionConfig = {
   name: "monkey", // Default is sid which gives away the name of the library
-  secret: (Date.now() * Math.random()).toString(), // Anything we want to add that just makes a random secret
+  secret: `${Date.now() * Math.random()}`, // Anything we want to add that just makes a random secret
   cookie: {
     maxAge: 1000 * 60 * 60 * 24,
     secure: false // Should be true in production so that cookies can send/receive over HTTPS
@@ -25,7 +26,13 @@ const sessionConfig = {
 
 const server = express();
 server.use(express.json());
-server.use(cors());
+server.use(
+  cors({
+    credentials: true,
+    origin: true
+  })
+);
+server.use(morgan("dev"));
 server.use(session(sessionConfig));
 
 server.get("/", (req, res) => {
@@ -114,7 +121,7 @@ server.get("/users", protected, async (req, res) => {
   res.status(200).json(users);
 });
 
-server.get("/logout", (req, res) => {
+server.get("/api/logout", (req, res) => {
   if (req.session) {
     req.session.destroy(err => {
       if (err) {

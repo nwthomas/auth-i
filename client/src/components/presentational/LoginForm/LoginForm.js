@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { login } from "../../../store/actions";
 
 const FormContainer = styled.div`
   width: 100%;
@@ -66,30 +68,48 @@ class LoginForm extends Component {
       [e.target.name]: e.target.value
     });
   };
+  startLogin = e => {
+    e.preventDefault();
+    this.props.login({
+      username: this.state.username,
+      password: this.state.password
+    });
+  };
+  clearForm = e => {
+    e.preventDefault();
+    this.setState({
+      username: "",
+      password: ""
+    });
+  };
   render() {
     return (
       <FormContainer>
         <h1>Please Login</h1>
-        <form>
+        <form onSubmit={this.startLogin}>
           <input
             required
-            autocomplete="off"
+            autoComplete="off"
             value={this.state.username}
             onChange={this.handleChange}
             name="username"
+            type="text"
             placeholder="Username"
           />
           <input
             required
-            autocomplete="off"
+            autoComplete="off"
             value={this.state.password}
             onChange={this.handleChange}
             name="password"
+            type="password"
             placeholder="Password"
           />
           <div>
-            <button>Submit</button>
-            <button>Cancel</button>
+            <button type="submit">Submit</button>
+            <button type="button" onClick={this.clearForm}>
+              Clear
+            </button>
           </div>
         </form>
       </FormContainer>
@@ -97,4 +117,13 @@ class LoginForm extends Component {
   }
 }
 
-export default LoginForm;
+const mapActionsToProps = {
+  login
+};
+
+export default connect(
+  null,
+  mapActionsToProps
+)(LoginForm);
+
+// axios.defaults.withCredentials = true;
