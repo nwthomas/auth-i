@@ -4,17 +4,16 @@ const bcrypt = require("bcryptjs");
 const db = require("./data/dbConfig.js");
 const session = require("express-session");
 const KnexSessionStore = require("connect-session-knex")(session);
-const secretString = Date.now() * Math.random();
 const sessionConfig = {
   name: "monkey", // Default is sid which gives away the name of the library
-  secret: secretString.toString(), // Anything we want to add that just makes a random secret
+  secret: (Date.now() * Math.random()).toString(), // Anything we want to add that just makes a random secret
   cookie: {
     maxAge: 1000 * 60 * 60 * 24,
     secure: false // Should be true in production so that cookies can send/receive over HTTPS
   },
   httpOnly: true, // js can't touch this
   resave: false,
-  saveUninitalized: false,
+  saveUninitialized: false,
   store: new KnexSessionStore({
     knex: db,
     tableName: "sessions",
