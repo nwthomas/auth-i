@@ -1,6 +1,4 @@
-// =========================================================== Variable Types
-export const VARIABLE_NAMES_STARTED = "VARIABLE_NAMES_STARTED";
-export const VARIABLE_NAMES_SUCCESS = "VARIABLE_NAMES_SUCCESS";
-export const VARIABLE_NAMES_ERROR = "VARIABLE_NAMES_ERROR";
-
-// =========================================================== Insert More as Needed
+// =========================================================== Login Types
+export const LOGIN_STARTED = "LOGIN_STARTED";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGIN_ERROR = "LOGIN_ERROR";

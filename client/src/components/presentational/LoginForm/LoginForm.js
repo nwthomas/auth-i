@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const FormContainer = styled.div`
@@ -56,15 +55,6 @@ const FormContainer = styled.div`
   }
 `;
 
-const styles = theme => ({
-  button: {
-    margin: theme.spacing.unit
-  },
-  input: {
-    display: "none"
-  }
-});
-
 class LoginForm extends Component {
   state = {
     username: "",
@@ -106,7 +96,5 @@ class LoginForm extends Component {
     );
   }
 }
-
-LoginForm.propTypes = {};
 
 export default LoginForm;

@@ -4,10 +4,10 @@ const bcrypt = require("bcryptjs");
 const db = require("./data/dbConfig.js");
 const session = require("express-session");
 const KnexSessionStore = require("connect-session-knex")(session);
-
+const secretString = Date.now() * Math.random();
 const sessionConfig = {
   name: "monkey", // Default is sid which gives away the name of the library
-  secret: Date.now() * Math.random(), // Anything we want to add that just makes a random secret
+  secret: secretString.toString(), // Anything we want to add that just makes a random secret
   cookie: {
     maxAge: 1000 * 60 * 60 * 24,
     secure: false // Should be true in production so that cookies can send/receive over HTTPS
@@ -26,12 +26,7 @@ const sessionConfig = {
 
 const server = express();
 server.use(express.json());
-server.use(
-  cors({
-    credentials: true,
-    origin: true
-  })
-);
+server.use(cors());
 server.use(session(sessionConfig));
 
 server.get("/", (req, res) => {

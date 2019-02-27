@@ -1,7 +1,7 @@
 import React from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import { LoginForm } from "../../presentational/LoginForm";
+import { connect } from "react-redux";
 
 const LoginWrapper = styled.div`
   width: 100%;
@@ -15,6 +15,11 @@ const LoginView = props => {
   );
 };
 
-LoginView.propTypes = {};
+const mapStateToProps = props => ({});
 
-export default LoginView;
+const mapActionsToProps = {};
+
+export default connect(
+  null,
+  {}
+)(LoginView);

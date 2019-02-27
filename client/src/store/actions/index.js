@@ -1,19 +1,14 @@
 import axios from "axios"; // Make sure to install dependencies
-import {
-  VARIABLE_NAMES_STARTED,
-  VARIABLE_NAMES_SUCCESS,
-  VARIABLE_NAMES_ERROR
-} from "../types"; // Import variable names to avoid spelling errors
+import { LOGIN_STARTED, LOGIN_SUCCESS, LOGIN_ERROR } from "../types";
 
-// Action creator function that uses thunk
-export const actionCreator = _ => dispatch => {
-  dispatch({ type: VARIABLE_NAMES_STARTED }); // Initial dispatch
+export const login = () => dispatch => {
+  dispatch({ type: LOGIN_STARTED });
   axios
-    .get("insert url")
+    .get("")
     .then(res => {
-      dispatch({ type: VARIABLE_NAMES_SUCCESS, payload: res.data }); // Success dispatch
+      dispatch({ type: LOGIN_SUCCESS, payload: res.data });
     })
     .catch(err => {
-      dispatch({ type: VARIABLE_NAMES_ERROR, payload: err.data }); // Error dispatch
+      dispatch({ type: LOGIN_ERROR, payload: err.data });
     });
 };
