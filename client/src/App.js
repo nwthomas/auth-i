@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import "./App.css";
+import { Route } from "react-router-dom";
+import { LoginView } from "./components/views/LoginView";
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <div />
+        <Route path="/" render={props => <LoginView />} />
       </div>
     );
   }

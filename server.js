@@ -7,7 +7,7 @@ const KnexSessionStore = require("connect-session-knex")(session);
 
 const sessionConfig = {
   name: "monkey", // Default is sid which gives away the name of the library
-  secret: "asdfp9auy0987yuhaif", // Anything we want to add that just makes a random secret
+  secret: Date.now() * Math.random(), // Anything we want to add that just makes a random secret
   cookie: {
     maxAge: 1000 * 60 * 60 * 24,
     secure: false // Should be true in production so that cookies can send/receive over HTTPS
@@ -26,7 +26,12 @@ const sessionConfig = {
 
 const server = express();
 server.use(express.json());
-server.use(cors());
+server.use(
+  cors({
+    credentials: true,
+    origin: true
+  })
+);
 server.use(session(sessionConfig));
 
 server.get("/", (req, res) => {
